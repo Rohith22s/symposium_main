@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Map</title>
+
+    <style>
+        body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f4f8;
+      font-family: Arial, sans-serif;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 20px;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    /* Different button colors */
+    .ground {
+      background-color: #4CAF50;
+    }
+    .first {
+      background-color: #2196F3;
+    }
+    .second {
+      background-color: #FF9800;
+    }
+    .third {
+      background-color: #9C27B0;
+    }
+
+    /* Hover Effects */
+    button:hover {
+      transform: scale(1.1);
+      opacity: 0.9;
+    }
+  
+    </style>
+</head>
+<body>
+    <div class="nav-buttons">
+    <button class="ground" onclick="location.href='Ground.html'">Ground floor</button>
+    <button class="first" onclick="location.href='one.html'">First floor</button>
+    <button class="second" onclick="location.href='two.html'">Second floor</button>
+    <button class="third" onclick="location.href='three.html'">Third floor</button>
+  </div>
+</body>
+</html>
+
+
+    
