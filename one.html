@@ -63,20 +63,6 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
     }
 
-    #sidebar {
-      width: 380px;
-      max-width: 42%;
-      display: flex;
-      flex-direction: column;
-      gap: 12px
-    }
-
-    .panel {
-      background: var(--card);
-      padding: 12px;
-      border-radius: 10px
-    }
-
     .muted {
       color: var(--muted);
       font-size: 13px
@@ -84,7 +70,8 @@
 
     svg {
       width: 100%;
-      height: 78vh;
+      height: 85vh;
+      /* Adjusted height */
       touch-action: none;
       display: block
     }
@@ -138,42 +125,6 @@
       color: #fff;
       border: none
     }
-
-    #progressBar {
-      height: 10px;
-      background: #eee;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-top: 8px
-    }
-
-    #progressFill {
-      height: 100%;
-      width: 0;
-      background: var(--accent);
-      transition: width 0.18s linear
-    }
-
-    .controls-row {
-      display: flex;
-      gap: 8px;
-      align-items: center
-    }
-
-    .small {
-      font-size: 12px;
-      color: var(--muted)
-    }
-
-    @media (max-width:900px) {
-      #app {
-        flex-direction: column
-      }
-
-      #sidebar {
-        width: 100%
-      }
-    }
   </style>
 </head>
 
@@ -181,6 +132,8 @@
   <header>
     <h1>Floor 1 — Indoor Navigation</h1>
     <div id="controls">
+      <!-- ADDED BACK BUTTON -->
+      <button id="backBtn" title="Go back">Back to Events</button>
       <button id="rotLeft" title="Rotate left">Left Arrow</button>
       <button id="rotRight" title="Rotate right">Right Arrow</button>
       <button id="resetView">Reset</button>
@@ -205,7 +158,7 @@
 
             <!-- central courtyard (not walkable) -->
             <rect x="300" y="260" width="400" height="380" fill="#fbfdff" stroke="#eef3fb" />
-            <text x="500" y="450" font-size="18" text-anchor="middle" fill="#6b6b6b">Floor 1</text>
+            <text x="500" y="450" font-size="45" text-anchor="middle" fill="#6b6b6b">Floor 1</text>
 
             <!-- TOP: Lab 1..4 -->
             <rect id="LAB1" class="room" x="180" y="80" width="150" height="70" />
@@ -302,13 +255,13 @@
             <rect id="LH08" class="room" x="860" y="445" width="80" height="90" />
             <text x="900" y="500" font-size="11" text-anchor="middle">
               <tspan x="900" dy="-10">LH-10</tspan>
-              <tspan x="900" dy="12" font-size="8">Hackathon</tspan>
+              <tspan x="900" dy="12" font-size="8">Startup Pitch</tspan>
             </text>
 
             <rect id="LH09" class="room" x="860" y="545" width="80" height="90" />
             <text x="900" y="600" font-size="11" text-anchor="middle">
               <tspan x="900" dy="-10">LH-11</tspan>
-              <tspan x="900" dy="12" font-size="8">Startup Pitch</tspan>
+              <tspan x="900" dy="12" font-size="8"></tspan>
             </text>
 
             <rect id="LH10" class="room" x="860" y="645" width="80" height="90" />
@@ -347,90 +300,19 @@
         </svg>
       </div>
     </div>
-
-    <aside id="sidebar" class="panel">
-      <div class="panel">
-        <div class="muted">Start</div>
-        <div style="font-weight:600;margin:6px 0">Entrance (South-center)</div>
-
-        <div class="muted" style="margin-top:8px">Destination</div>
-        <select id="destSelect" style="width:100%;margin-top:6px">
-          <option value="">-- choose destination --</option>
-          <option value="SH1">SH-1</option>
-          <option value="STAFF">Staff Room</option>
-          <option value="LH14">LH-14</option>
-          <option value="LH13">LH-13</option>
-          <option value="LH06">LH-06</option>
-          <option value="LH07">LH-07</option>
-          <option value="LH08">LH-08</option>
-          <option value="LH09">LH-09</option>
-          <option value="LH10">LH-10</option>
-          <option value="LAB1">Lab 1</option>
-          <option value="LAB2">Lab 2</option>
-          <option value="LAB3">Lab 3</option>
-          <option value="LAB4">Lab 4</option>
-          <option value="LABA">Lab A</option>
-          <option value="LABB">Lab B</option>
-          <option value="LABC">Lab C</option>
-          <option value="REST_TOP">Restroom</option>
-        </select>
-
-        <div style="display:flex;gap:8px;margin-top:10px">
-          <button id="startBtn" class="primary">Start Navigation</button>
-          <button id="clearBtn">Clear</button>
-        </div>
-
-        <div style="margin-top:12px" class="muted">Calibration & fallback</div>
-        <label class="small">Avg step length (m)</label>
-        <input id="stepLen" type="number" step="0.01" value="0.75" style="width:100%;margin-top:6px" />
-
-        <div style="display:flex;gap:6px;margin-top:10px">
-          <button id="manualStep">Manual Step</button>
-          <button id="resetProgress">Reset</button>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="muted">Status</div>
-        <div style="margin-top:8px" class="controls-row">
-          <div class="small">Steps</div>
-          <div id="steps">0</div>
-        </div>
-        <div class="controls-row">
-          <div class="small">Distance travelled</div>
-          <div id="distTraveled">0.00 m</div>
-        </div>
-        <div class="controls-row">
-          <div class="small">Remaining</div>
-          <div id="distRemaining">0.00 m</div>
-        </div>
-        <div id="progressBar">
-          <div id="progressFill"></div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="muted">Instruction (voice + text)</div>
-        <div id="instr" style="margin-top:8px;font-weight:700">No route</div>
-      </div>
-    </aside>
   </div>
-
-  <footer style="padding:8px;text-align:center;color:var(--muted)">Open in Chrome (Android) for accelerometer support.
-    Allow motion permission when prompted.</footer>
 
   <script>
     /* --------------------------
      Node coordinates and graph (corridor ring)
-     Match coordinates used in SVG above
      ---------------------------*/
-    const START = { x: 500, y: 920 }; // Entrance (south-center)
+    const START_pos = { x: 500, y: 920 }; // Original Entrance (south-center) - no longer used as start
     const nodes = {
       // Corners
       NW: { x: 160, y: 180 },
       NE: { x: 840, y: 180 },
       SE: { x: 840, y: 820 },
-      SW: { x: 160, y: 820 },
+      SW: { x: 160, y: 820 }, // This is the new START node
       // Top intermediates
       N1: { x: 255, y: 180 }, // LAB1
       N2: { x: 415, y: 180 }, // LAB2
@@ -453,12 +335,11 @@
       L3: { x: 160, y: 340 }  // LABC
     };
 
-    /* adjacency (clockwise ring) + START -> B3 */
+    /* adjacency (clockwise ring) */
     const graph = {
-      'START': ['B3'],
-      B3: ['START', 'B4', 'B2'],
+      B3: ['B4', 'B2'],
       B4: ['B3', 'SW'],
-      SW: ['B4', 'L1'],
+      SW: ['B4', 'L1'], // SW is the new start point
       L1: ['SW', 'L2'],
       L2: ['L1', 'L3'],
       L3: ['L2', 'NW'],
@@ -477,6 +358,9 @@
       B1: ['SE', 'B2'],
       B2: ['B1', 'B3']
     };
+    graph['B3'].push('START_pos');
+    graph['START_pos'] = ['B3'];
+
 
     /* POI -> nearest node mapping */
     const POI_NODE = {
@@ -486,28 +370,31 @@
       'SH1': 'B4', 'STAFF': 'B3', 'LH14': 'B2', 'LH13': 'B1'
     };
 
+    /* FIXED: Map venue names from events.html to local SVG IDs */
+    const venueMap = {
+      'ALPHA LAB': 'LABA',
+      'BETA LAB': 'LABB',
+      'LH13': 'LH13',
+      'LH08': 'LH06', // ECE "LH08" -> ID "LH06"
+      'LH09': 'LH07', // ECE "LH09" -> ID "LH07"
+      'LIC LAB': 'LAB4',
+      'MPMC LAB': 'LAB3',
+      'LH10': 'LH08', // ECE "LH10" -> ID "LH08"
+      'CIRCUITS LAB': 'LAB2',
+      'LH 12': 'LH10' // AI&DS "LH 12" -> ID "LH10"
+    };
+
     /* DOM */
     const svg = document.getElementById('svg');
     const viewport = document.getElementById('viewport');
     const route = document.getElementById('route');
     const routeOverlay = document.getElementById('routeOverlay');
-    const destSelect = document.getElementById('destSelect');
-    const instrEl = document.getElementById('instr');
-    const stepsEl = document.getElementById('steps');
-    const distTrEl = document.getElementById('distTraveled');
-    const distRemEl = document.getElementById('distRemaining');
-    const progressFill = document.getElementById('progressFill');
-
-    const startBtn = document.getElementById('startBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const manualStepBtn = document.getElementById('manualStep');
-    const resetBtn = document.getElementById('resetProgress');
     const searchBtn = document.getElementById('searchBtn');
     const searchBox = document.getElementById('searchBox');
-
     const rotLeft = document.getElementById('rotLeft');
     const rotRight = document.getElementById('rotRight');
     const resetView = document.getElementById('resetView');
+    const backBtn = document.getElementById('backBtn'); // Back button
 
     /* transform state */
     let state = { tx: 0, ty: 0, scale: 1, rotate: 0, dragging: false, lastX: 0, lastY: 0 };
@@ -519,10 +406,15 @@
     svg.addEventListener('pointermove', (e) => { if (!state.dragging) return; const dx = e.clientX - state.lastX, dy = e.clientY - state.lastY; state.lastX = e.clientX; state.lastY = e.clientY; state.tx += dx; state.ty += dy; applyTransform(); });
     svg.addEventListener('pointerup', (e) => { state.dragging = false; try { svg.releasePointerCapture(e.pointerId); } catch (e) { } svg.style.cursor = 'grab'; });
     svg.addEventListener('pointerleave', () => state.dragging = false);
-    svg.addEventListener('wheel', (e) => { e.preventDefault(); if (e.shiftKey) { state.rotate += e.deltaY > 0 ? 3 : -3; } else { const delta = -e.deltaY * 0.0015; state.scale = Math.min(3, Math.max(0.4, state.scale * (1 + delta))); } applyTransform(); }, { passive: false });
+    svg.addEventListener('wheel', (e) => { e.preventDefault(); if (e.DeltashiftKey) { state.rotate += e.deltaY > 0 ? 3 : -3; } else { const delta = -e.deltaY * 0.0015; state.scale = Math.min(3, Math.max(0.4, state.scale * (1 + delta))); } applyTransform(); }, { passive: false });
     rotLeft.addEventListener('click', () => { state.rotate -= 15; applyTransform(); });
     rotRight.addEventListener('click', () => { state.rotate += 15; applyTransform(); });
     resetView.addEventListener('click', () => { state.tx = 40; state.ty = 10; state.scale = 1; state.rotate = 0; applyTransform(); });
+
+    // Back button listener
+    backBtn.addEventListener('click', () => {
+      window.location.href = 'events.html';
+    });
 
     /* routing */
     function findPath(start, end) {
@@ -540,124 +432,99 @@
       }
       return null;
     }
-    function nodePos(k) { if (k === 'START') return START; return nodes[k]; }
+    function nodePos(k) { if (k === 'START_pos') return START_pos; return nodes[k]; }
     function pathToPoints(seq) { return seq.map(k => { const p = nodePos(k); return `${p.x} ${p.y}`; }).join(' '); }
-    function polylineLength(points) { routeOverlay.setAttribute('points', points); try { return routeOverlay.getTotalLength(); } catch (e) { return 0; } }
 
-    /* route state */
-    let currentRoute = [], routePixelsTotal = 0, traveledPixels = 0, stepCount = 0, lastPeak = 0, lastSpokenIndex = 0;
-    let pixelsPerMeter = 55;
-    let avgStepMeters = parseFloat(document.getElementById('stepLen').value) || 0.75;
-
+    /**
+     * Draws a path from the start to the destination.
+     * @param {string} destKey The ID of the destination (e.g., "LABA", "LH13")
+     */
     function setRouteTo(destKey) {
-      if (!POI_NODE[destKey]) { alert('Unknown dest'); return false; }
+      // 1. Clear previous highlights/routes
+      route.setAttribute('points', '');
+      document.querySelectorAll('.room.highlight').forEach(el => el.classList.remove('highlight'));
+
+      // 2. Find destination node
+      if (!POI_NODE[destKey]) {
+        console.warn('Unknown destination key:', destKey);
+        return false;
+      }
       const nodeKey = POI_NODE[destKey];
-      const seq = findPath('START', nodeKey);
-      if (!seq) { alert('No path'); return false; }
-      currentRoute = seq.slice();
-      const pts = pathToPoints(currentRoute);
-      route.setAttribute('points', pts); routeOverlay.setAttribute('points', pts);
-      routePixelsTotal = polylineLength(pts);
-      traveledPixels = 0; stepCount = 0; lastSpokenIndex = 0;
-      updateUI(); setRouteDash(0);
-      const inst = makeInstructions(currentRoute);
-      instrEl.textContent = inst[0]?.text || 'Follow the route';
-      speak(inst[0]?.speech || inst[0]?.text || 'Follow the route');
+
+      // 3. Determine start node (Hardcoded for Floor 1)
+      const startNode = 'SW'; // Bottom-left corner node
+
+      // 4. Find path
+      const seq = findPath(startNode, nodeKey);
+      if (!seq) {
+        console.warn('No path found from', startNode, 'to', nodeKey);
+        return false;
+      }
+
+      // 5. Draw path
+      const pts = pathToPoints(seq);
+      route.setAttribute('points', pts);
+      routeOverlay.setAttribute('points', pts);
+
+      // 6. Highlight destination
+      const destEl = document.getElementById(destKey);
+      if (destEl) {
+        destEl.classList.add('highlight');
+      }
       return true;
     }
-    function setRouteDash(travelPx) {
-      try { const total = routeOverlay.getTotalLength(); route.style.strokeDasharray = total; route.style.strokeDashoffset = Math.max(0, total - travelPx); } catch (e) { }
-    }
-
-    /* instructions builder */
-    function makeInstructions(seq) {
-      const out = []; if (!seq || seq.length < 2) return out;
-      out.push({ text: 'Start at Entrance', speech: 'Start at entrance.' });
-      for (let i = 1; i < seq.length; i++) {
-        const a = nodePos(seq[i - 1]), b = nodePos(seq[i]);
-        const dx = b.x - a.x, dy = b.y - a.y; const dist = Math.hypot(dx, dy);
-        let dir = 'proceed';
-        if (Math.abs(dx) > Math.abs(dy)) dir = dx > 0 ? 'proceed east' : 'proceed west';
-        else dir = dy > 0 ? 'proceed south' : 'proceed north';
-        const meters = Math.round((dist / pixelsPerMeter) * 100) / 100;
-        out.push({ text: `${dir} for ${meters} m`, speech: `${dir} for ${meters} meters.` });
-      }
-      out.push({ text: 'You have arrived', speech: 'You have arrived at your destination.' });
-      return out;
-    }
-
-    /* UI update */
-    function updateUI() { stepsEl.textContent = stepCount; distTrEl.textContent = (stepCount * avgStepMeters).toFixed(2) + ' m'; const remain = Math.max(0, (routePixelsTotal - traveledPixels) / pixelsPerMeter).toFixed(2); distRemEl.textContent = remain + ' m'; const pct = routePixelsTotal ? Math.min(100, Math.round((traveledPixels / routePixelsTotal) * 100)) : 0; progressFill.style.width = pct + '%'; }
-
-    /* motion / step detection */
-    function motionHandler(ev) {
-      const acc = ev.accelerationIncludingGravity || ev.acceleration || { x: 0, y: 0, z: 0 };
-      const mag = Math.sqrt((acc.x || 0) ** 2 + (acc.y || 0) ** 2 + (acc.z || 0) ** 2);
-      const g = 9.81; const val = Math.abs(mag - g);
-      if (val > 1.1) {
-        const now = Date.now();
-        if (now - lastPeak > 300) {
-          lastPeak = now; stepCount++;
-          const px = (avgStepMeters || 0.75) * pixelsPerMeter;
-          traveledPixels += px; setRouteDash(traveledPixels); updateUI(); checkAndSpeak();
-          if (traveledPixels >= routePixelsTotal) arrive();
-        }
-      }
-    }
-    function arrive() { instrEl.textContent = 'Arrived'; speak('You have arrived at your destination'); stopMotion(); }
-
-    /* speech */
-    function speak(text) { if (!text) return; try { if ('speechSynthesis' in window) { const u = new SpeechSynthesisUtterance(text); u.lang = 'en-US'; window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); } } catch (e) { } }
-
-    /* start / stop motion */
-    async function startMotion() {
-      avgStepMeters = parseFloat(document.getElementById('stepLen').value) || 0.75;
-      if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-        try { const res = await DeviceMotionEvent.requestPermission(); if (res === 'granted') { window.addEventListener('devicemotion', motionHandler, { passive: true }); } else alert('Motion denied — use Manual Step'); } catch (e) { alert('Motion permission error — use Manual Step'); }
-      } else window.addEventListener('devicemotion', motionHandler, { passive: true });
-    }
-    function stopMotion() { window.removeEventListener('devicemotion', motionHandler); }
-
-    /* speak at segment thresholds */
-    function checkAndSpeak() {
-      if (!currentRoute || currentRoute.length < 2) return;
-      let cum = 0; const thresholds = [];
-      for (let i = 1; i < currentRoute.length; i++) { const a = nodePos(currentRoute[i - 1]), b = nodePos(currentRoute[i]); const d = Math.hypot(a.x - b.x, a.y - b.y); cum += d; thresholds.push(cum); }
-      for (let i = 0; i < thresholds.length; i++) {
-        if (traveledPixels >= thresholds[i] && lastSpokenIndex < i + 1) {
-          const inst = makeInstructions(currentRoute); const s = inst[i + 1] ? inst[i + 1].speech : ''; speak(s); lastSpokenIndex = i + 1;
-        }
-      }
-    }
-
-    /* UI wiring */
-    startBtn.addEventListener('click', async () => {
-      const dest = destSelect.value;
-      if (!dest) { alert('Choose destination'); return; }
-      if (!setRouteTo(dest)) return;
-      instrEl.textContent = 'Navigation started'; await startMotion();
-    });
-    clearBtn.addEventListener('click', () => { route.setAttribute('points', ''); routeOverlay.setAttribute('points', ''); instrEl.textContent = 'No route'; traveledPixels = 0; stepCount = 0; updateUI(); });
-    manualStepBtn.addEventListener('click', () => { stepCount++; const px = (avgStepMeters || 0.75) * pixelsPerMeter; traveledPixels += px; setRouteDash(traveledPixels); updateUI(); checkAndSpeak(); if (traveledPixels >= routePixelsTotal) arrive(); });
-    resetBtn.addEventListener('click', () => { traveledPixels = 0; stepCount = 0; setRouteDash(0); updateUI(); instrEl.textContent = 'Progress reset'; });
 
     /* clickable rooms */
     document.querySelectorAll('.room').forEach(el => {
       el.addEventListener('click', () => {
         const id = el.id;
-        if (POI_NODE[id]) { destSelect.value = id; el.classList.add('highlight'); setTimeout(() => el.classList.remove('highlight'), 900); }
+        if (POI_NODE[id]) {
+          setRouteTo(id);
+        }
       });
     });
 
     /* search */
-    searchBtn.addEventListener('click', () => { const q = searchBox.value.trim().toUpperCase(); if (!q) return; const el = document.getElementById(q); if (el) { el.classList.add('highlight'); setTimeout(() => el.classList.remove('highlight'), 900); destSelect.value = q; } else alert('Not found: ' + q); });
+    searchBtn.addEventListener('click', () => {
+      const q = searchBox.value.trim().toUpperCase();
+      if (!q) return;
 
-    /* navigateTo API */
-    window.navigateTo = function (name) { if (!name) return; const n = name.trim().toUpperCase(); if (POI_NODE[n]) { destSelect.value = n; setRouteTo(n); startMotion().catch(() => { }); } else alert('Unknown: ' + name); };
+      const mappedQ = (venueMap && venueMap[q]) ? venueMap[q] : q;
 
-    /* initial state */
-    updateUI();
+      if (POI_NODE[mappedQ]) {
+        setRouteTo(mappedQ);
+      } else {
+        alert('Not found: ' + q);
+      }
+    });
+
+    /**
+     * Initializes the map on page load by reading the URL.
+     */
+    function initializeMap() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const venue = urlParams.get('venue');
+      if (!venue) return;
+
+      let destKey = venue.trim().toUpperCase();
+
+      if (venueMap[destKey]) {
+        destKey = venueMap[destKey];
+      }
+
+      if (POI_NODE[destKey]) {
+        setRouteTo(destKey);
+      } else {
+        console.warn('Could not find POI for venue:', venue);
+      }
+    }
+
+    /* initial call on page load */
+    initializeMap();
   </script>
 </body>
 
 </html>
+
+
+
