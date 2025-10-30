@@ -63,20 +63,6 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
         }
 
-        #sidebar {
-            width: 380px;
-            max-width: 42%;
-            display: flex;
-            flex-direction: column;
-            gap: 12px
-        }
-
-        .panel {
-            background: var(--card);
-            padding: 12px;
-            border-radius: 10px
-        }
-
         .muted {
             color: var(--muted);
             font-size: 13px
@@ -84,7 +70,8 @@
 
         svg {
             width: 100%;
-            height: 78vh;
+            height: 85vh;
+            /* Adjusted height */
             touch-action: none;
             display: block
         }
@@ -138,31 +125,6 @@
             color: #fff;
             border: none
         }
-
-        #progressBar {
-            height: 10px;
-            background: #eee;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-top: 8px
-        }
-
-        #progressFill {
-            height: 100%;
-            width: 0;
-            background: var(--accent);
-            transition: width 0.18s linear
-        }
-
-        @media (max-width:900px) {
-            #app {
-                flex-direction: column
-            }
-
-            #sidebar {
-                width: 100%
-            }
-        }
     </style>
 </head>
 
@@ -170,11 +132,9 @@
     <header>
         <h1>Floor 3 — Indoor Navigation</h1>
         <div id="controls">
-            <button id="rotLeft" title="Rotate left">⟲</button>
-            <button id="rotRight" title="Rotate right">⟳</button>
-            <button id="resetView">Reset</button>
-            <input id="searchBox" placeholder="Search: LH24, DHALL, AUD..." />
-            <button id="searchBtn">Search</button>
+            <!-- ADDED BACK BUTTON -->
+            <button id="backBtn" title="Go back">Back</button>
+           
         </div>
     </header>
 
@@ -188,8 +148,7 @@
 
                         <!-- central courtyard -->
                         <rect x="280" y="260" width="440" height="420" fill="#fbfdff" stroke="#eef3fb" />
-                        <text x="500" y="470" font-size="18" text-anchor="middle" fill="#6b6b6b">Central
-                            Courtyard</text>
+                        <text x="500" y="470" font-size="42" text-anchor="middle" fill="#6b6b6b">Floor 3</text>
 
                         <!-- TOP (left→right): STAFF, DHALL1, DHALL2, LAB -->
                         <rect id="STAFF" class="room" x="180" y="50" width="160" height="70" /><text x="260" y="90"
@@ -235,31 +194,35 @@
 
                         <!-- LEFT: LH-24 .. LH-28 top->bottom (5) -->
                         <rect id="LH24" class="room" x="40" y="245" width="80" height="90" /><text x="80" y="290"
-                            font-size="12" text-anchor="middle">LH-24</text>
+                            font-size="12" text-anchor="middle">LH-29</text>
                         <rect id="LH25" class="room" x="40" y="345" width="80" height="90" /><text x="80" y="390"
-                            font-size="12" text-anchor="middle">LH-25</text>
+                            font-size="12" text-anchor="middle">LH-30</text>
                         <rect id="LH26" class="room" x="40" y="445" width="80" height="90" /><text x="80" y="490"
-                            font-size="12" text-anchor="middle">LH-26</text>
+                            font-size="12" text-anchor="middle">LH</text>
                         <rect id="LH27" class="room" x="40" y="545" width="80" height="90" /><text x="80" y="590"
-                            font-size="12" text-anchor="middle">LH-27</text>
+                            font-size="12" text-anchor="middle">LH</text>
                         <rect id="LH28" class="room" x="40" y="645" width="80" height="90" /><text x="80" y="690"
-                            font-size="12" text-anchor="middle">LH-28</text>
+                            font-size="12" text-anchor="middle">LH31</text>
 
                         <!-- RIGHT: LH-29 .. LH-33 top->bottom (5) -->
                         <rect id="LH29" class="room" x="880" y="245" width="80" height="90" />
-                        <text x="900" y="300" font-size="11" text-anchor="middle">LH29</text>
+                        <text x="920" y="290" font-size="11" text-anchor="middle">LH22</text>
+                        <text x="920" y="302" font-size="9" text-anchor="middle">Paper Presentation</text>
+                        <text x="920" y="314" font-size="9" text-anchor="middle">Lyrics Coding</text>
+                        <text x="920" y="326" font-size="9" text-anchor="middle">Act it Out</text>
 
                         <rect id="LH30" class="room" x="880" y="345" width="80" height="90" />
-                        <text x="900" y="400" font-size="11" text-anchor="middle">LH30</text>
+                        <text x="920" y="390" font-size="11" text-anchor="middle">LH23</text>
+                        <text x="920" y="402" font-size="9" text-anchor="middle">Technical Quiz</text>
 
                         <rect id="LH31" class="room" x="880" y="445" width="80" height="90" />
-                        <text x="900" y="500" font-size="11" text-anchor="middle">LH31</text>
+                        <text x="920" y="500" font-size="11" text-anchor="middle">LH24</text>
 
                         <rect id="LH32" class="room" x="880" y="545" width="80" height="90" />
-                        <text x="900" y="600" font-size="11" text-anchor="middle">LH32</text>
+                        <text x="920" y="600" font-size="11" text-anchor="middle">LH25</text>
 
                         <rect id="LH33" class="room" x="880" y="645" width="80" height="90" />
-                        <text x="900" y="700" font-size="11" text-anchor="middle">LH33</text>
+                        <text x="920" y="700" font-size="11" text-anchor="middle">LH26</text>
 
                         <!-- BOTTOM (left→right): DHALL small, MAIN AUDITORIUM, LH-34, LH-35 -->
                         <rect id="DH_BOTTOM" class="room" x="80" y="860" width="180" height="70" /><text x="180"
@@ -267,9 +230,9 @@
                         <rect id="MAUD" class="room" x="270" y="860" width="350" height="70" /><text x="450" y="895"
                             font-size="12" text-anchor="middle">MAIN AUDITORIUM</text>
                         <rect id="LH34" class="room" x="630" y="860" width="120" height="70" /><text x="690" y="895"
-                            font-size="12" text-anchor="middle">LH-34</text>
+                            font-size="12" text-anchor="middle">LH-28</text>
                         <rect id="LH35" class="room" x="760" y="860" width="120" height="70" /><text x="820" y="895"
-                            font-size="12" text-anchor="middle">LH-35</text>
+                            font-size="12" text-anchor="middle">LH-27</text>
 
                         <!-- route & overlay -->
                         <polyline id="route" points="" />
@@ -278,77 +241,13 @@
                 </svg>
             </div>
         </div>
-
-        <aside id="sidebar" class="panel">
-            <div class="panel">
-                <div class="muted">Start</div>
-                <div style="font-weight:600;margin:6px 0">Entrance (South-center)</div>
-
-                <div class="muted" style="margin-top:8px">Destination</div>
-                <select id="destSelect" style="width:100%;margin-top:6px">
-                    <option value="">-- choose destination --</option>
-                    <option value="DH_BOTTOM">DHall (bottom)</option>
-                    <option value="MAUD">Main Auditorium</option>
-                    <option value="LH34">LH-34</option>
-                    <option value="LH35">LH-35</option>
-                    <option value="LH29">LH-29</option>
-                    <option value="LH30">LH-30</option>
-                    <option value="LH31">LH-31</option>
-                    <option value="LH32">LH-32</option>
-                    <option value="LH33">LH-33</option>
-                    <option value="LH24">LH-24</option>
-                    <option value="LH25">LH-25</option>
-                    <option value="LH26">LH-26</option>
-                    <option value="LH27">LH-27</option>
-                    <option value="LH28">LH-28</option>
-                    <option value="LAB">Lab</option>
-                    <option value="DH1">DHall 1</option>
-                    <option value="DH2">DHall 2</option>
-                    <option value="STAFF">Staff</option>
-                    <option value="REST_TOP">Restroom</option>
-                </select>
-
-                <div style="display:flex;gap:8px;margin-top:10px">
-                    <button id="startBtn" class="primary">Start Navigation</button>
-                    <button id="clearBtn">Clear</button>
-                </div>
-
-                <div style="margin-top:12px" class="muted">Calibration & fallback</div>
-                <label class="small">Avg step length (m)</label>
-                <input id="stepLen" type="number" step="0.01" value="0.75" style="width:100%;margin-top:6px" />
-
-                <div style="display:flex;gap:6px;margin-top:10px">
-                    <button id="manualStep">Manual Step</button>
-                    <button id="resetProgress">Reset</button>
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="muted">Status</div>
-                <div style="margin-top:8px" class="small">Steps: <span id="steps">0</span></div>
-                <div class="small">Distance travelled: <span id="distTraveled">0.00 m</span></div>
-                <div class="small">Remaining: <span id="distRemaining">0.00 m</span></div>
-                <div id="progressBar">
-                    <div id="progressFill"></div>
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="muted">Instruction (voice + text)</div>
-                <div id="instr" style="margin-top:8px;font-weight:700">No route</div>
-            </div>
-        </aside>
     </div>
-
-    <footer style="padding:8px;text-align:center;color:var(--muted)">Open in Chrome (Android) for accelerometer support.
-        Allow motion permission when prompted.</footer>
 
     <script>
         /* --------------------------
          Node coordinates & graph (corridor ring)
-         Coordinates chosen to match the SVG above
          ---------------------------*/
-        const START = { x: 500, y: 920 }; // entrance
+        const START_pos = { x: 500, y: 920 }; // original entrance, not used as start
         const nodes = {
             // top anchors
             N1: { x: 260, y: 135 }, N2: { x: 420, y: 135 }, N3: { x: 580, y: 135 }, N4: { x: 740, y: 135 },
@@ -356,19 +255,22 @@
             // right side anchors
             E1: { x: 800, y: 240 }, E2: { x: 800, y: 340 }, E3: { x: 800, y: 440 }, E4: { x: 800, y: 540 }, E5: { x: 800, y: 640 },
             // bottom anchors right->left
-            S_E: { x: 820, y: 820 }, S2: { x: 675, y: 820 }, S1: { x: 495, y: 820 }, S_W: { x: 250, y: 820 },
+            S_E: { x: 820, y: 820 }, S2: { x: 675, y: 820 }, S1: { x: 495, y: 820 }, S_W: { x: 250, y: 820 }, // S_W is new start
             // left side anchors bottom->top
             W3: { x: 180, y: 680 }, W2: { x: 180, y: 560 }, W1: { x: 180, y: 360 }
         };
 
-        /* adjacency around ring + START->S1 */
+        /* adjacency around ring */
         const graph = {
-            'START': ['S1'],
             'N1': ['N2', 'W1'], 'N2': ['N1', 'N3'], 'N3': ['N2', 'N4'], 'N4': ['N3', 'NE'],
             'NE': ['N4', 'E1'], 'E1': ['NE', 'E2'], 'E2': ['E1', 'E3'], 'E3': ['E2', 'E4'], 'E4': ['E3', 'E5'], 'E5': ['E4', 'S_E'],
-            'S_E': ['E5', 'S2'], 'S2': ['S_E', 'S1'], 'S1': ['S2', 'S_W', 'START'], 'S_W': ['S1', 'W3'],
+            'S_E': ['E5', 'S2'], 'S2': ['S_E', 'S1'], 'S1': ['S2', 'S_W'],
+            'S_W': ['S1', 'W3'], // S_W is new start
             'W3': ['S_W', 'W2'], 'W2': ['W3', 'W1'], 'W1': ['W2', 'N1']
         };
+        graph['START_pos'] = ['S1']; // Keep for reference
+        graph['S1'].push('START_pos');
+
 
         /* POI -> nearest node */
         const POI_NODE = {
@@ -378,28 +280,22 @@
             'DH_BOTTOM': 'S_W', 'MAUD': 'S1', 'LH34': 'S2', 'LH35': 'S_E'
         };
 
+        /* Map venue names from events.html to local SVG IDs */
+        const venueMap = {
+            // No events on this floor
+        };
+
         /* DOM */
         const svg = document.getElementById('svg');
         const viewport = document.getElementById('viewport');
         const route = document.getElementById('route');
         const routeOverlay = document.getElementById('routeOverlay');
-        const destSelect = document.getElementById('destSelect');
-        const instrEl = document.getElementById('instr');
-        const stepsEl = document.getElementById('steps');
-        const distTrEl = document.getElementById('distTraveled');
-        const distRemEl = document.getElementById('distRemaining');
-        const progressFill = document.getElementById('progressFill');
-
-        const startBtn = document.getElementById('startBtn');
-        const clearBtn = document.getElementById('clearBtn');
-        const manualStepBtn = document.getElementById('manualStep');
-        const resetBtn = document.getElementById('resetProgress');
         const searchBtn = document.getElementById('searchBtn');
         const searchBox = document.getElementById('searchBox');
-
         const rotLeft = document.getElementById('rotLeft');
         const rotRight = document.getElementById('rotRight');
         const resetView = document.getElementById('resetView');
+        const backBtn = document.getElementById('backBtn'); // Back button
 
         /* transform state */
         let state = { tx: 30, ty: 10, scale: 1, rotate: 0, dragging: false, lastX: 0, lastY: 0 };
@@ -414,7 +310,12 @@
         svg.addEventListener('wheel', (e) => { e.preventDefault(); if (e.shiftKey) { state.rotate += e.deltaY > 0 ? 3 : -3; } else { const delta = -e.deltaY * 0.0015; state.scale = Math.min(3, Math.max(0.4, state.scale * (1 + delta))); } applyTransform(); }, { passive: false });
         rotLeft.addEventListener('click', () => { state.rotate -= 15; applyTransform(); });
         rotRight.addEventListener('click', () => { state.rotate += 15; applyTransform(); });
-        resetView.addEventListener('click', () => { state.tx = 30; state.ty = 10; state.scale = 1; state.rotate = 0; applyTransform(); });
+        resetView.addEventListener('click', () => { state.tx = 30; ty = 10; state.scale = 1; state.rotate = 0; applyTransform(); });
+
+        // Back button listener
+        backBtn.addEventListener('click', () => {
+          window.location.href = 'events.html';
+        });
 
         /* routing BFS */
         function findPath(start, end) {
@@ -432,121 +333,96 @@
             }
             return null;
         }
-        function nodePos(k) { if (k === 'START') return START; return nodes[k]; }
+        function nodePos(k) { if (k === 'START_pos') return START_pos; return nodes[k]; }
         function pathToPoints(seq) { return seq.map(k => { const p = nodePos(k); return `${p.x} ${p.y}`; }).join(' '); }
-        function polylineLength(points) { routeOverlay.setAttribute('points', points); try { return routeOverlay.getTotalLength(); } catch (e) { return 0; } }
 
-        /* route state */
-        let currentRoute = [], routePixelsTotal = 0, traveledPixels = 0, stepCount = 0, lastPeak = 0, lastSpokenIndex = 0;
-        let pixelsPerMeter = 55;
-        let avgStepMeters = parseFloat(document.getElementById('stepLen').value) || 0.75;
-
+        /**
+         * Draws a path from the start to the destination.
+         * @param {string} destKey The ID of the destination (e.g., "LH24", "MAUD")
+         */
         function setRouteTo(destKey) {
-            if (!POI_NODE[destKey]) { alert('Unknown dest: ' + destKey); return false; }
+            // 1. Clear previous highlights/routes
+            route.setAttribute('points', '');
+            document.querySelectorAll('.room.highlight').forEach(el => el.classList.remove('highlight'));
+
+            // 2. Find destination node
+            if (!POI_NODE[destKey]) {
+                console.warn('Unknown destination key:', destKey);
+                return false;
+            }
             const nodeKey = POI_NODE[destKey];
-            const seq = findPath('START', nodeKey);
-            if (!seq) { alert('No path'); return false; }
-            currentRoute = seq.slice();
-            const pts = pathToPoints(currentRoute);
-            route.setAttribute('points', pts); routeOverlay.setAttribute('points', pts);
-            routePixelsTotal = polylineLength(pts);
-            traveledPixels = 0; stepCount = 0; lastSpokenIndex = 0;
-            updateUI(); setRouteDash(0);
-            const inst = makeInstructions(currentRoute);
-            instrEl.textContent = inst[0]?.text || 'Follow the route';
-            speak(inst[0]?.speech || inst[0]?.text || 'Follow the route');
+
+            // 3. Determine start node (Hardcoded for Floor 3)
+            const startNode = 'S_W'; // Bottom-left corner node
+
+            // 4. Find path
+            const seq = findPath(startNode, nodeKey);
+            if (!seq) {
+                console.warn('No path found from', startNode, 'to', nodeKey);
+                return false;
+            }
+
+            // 5. Draw path
+            const pts = pathToPoints(seq);
+            route.setAttribute('points', pts);
+            routeOverlay.setAttribute('points', pts);
+
+            // 6. Highlight destination
+            const destEl = document.getElementById(destKey);
+            if (destEl) {
+                destEl.classList.add('highlight');
+            }
             return true;
         }
-        function setRouteDash(travelPx) {
-            try { const total = routeOverlay.getTotalLength(); route.style.strokeDasharray = total; route.style.strokeDashoffset = Math.max(0, total - travelPx); } catch (e) { }
-        }
 
-        /* instructions builder */
-        function makeInstructions(seq) {
-            const out = []; if (!seq || seq.length < 2) return out;
-            out.push({ text: 'Start at Entrance', speech: 'Start at the entrance.' });
-            for (let i = 1; i < seq.length; i++) {
-                const a = nodePos(seq[i - 1]), b = nodePos(seq[i]);
-                const dx = b.x - a.x, dy = b.y - a.y; const dist = Math.hypot(dx, dy);
-                let dir = 'proceed';
-                if (Math.abs(dx) > Math.abs(dy)) dir = dx > 0 ? 'proceed east' : 'proceed west';
-                else dir = dy > 0 ? 'proceed south' : 'proceed north';
-                const meters = Math.round((dist / pixelsPerMeter) * 100) / 100;
-                out.push({ text: `${dir} for ${meters} m`, speech: `${dir} for ${meters} meters.` });
-            }
-            out.push({ text: 'You have arrived', speech: 'You have arrived at your destination.' });
-            return out;
-        }
-
-        /* UI update */
-        function updateUI() { stepsEl.textContent = stepCount; distTrEl.textContent = (stepCount * avgStepMeters).toFixed(2) + ' m'; const remain = Math.max(0, (routePixelsTotal - traveledPixels) / pixelsPerMeter).toFixed(2); distRemEl.textContent = remain + ' m'; const pct = routePixelsTotal ? Math.min(100, Math.round((traveledPixels / routePixelsTotal) * 100)) : 0; progressFill.style.width = pct + '%'; }
-
-        /* motion detection */
-        function motionHandler(ev) {
-            const acc = ev.accelerationIncludingGravity || ev.acceleration || { x: 0, y: 0, z: 0 };
-            const mag = Math.sqrt((acc.x || 0) ** 2 + (acc.y || 0) ** 2 + (acc.z || 0) ** 2);
-            const g = 9.81; const val = Math.abs(mag - g);
-            if (val > 1.1) {
-                const now = Date.now();
-                if (now - lastPeak > 300) {
-                    lastPeak = now; stepCount++;
-                    const px = (avgStepMeters || 0.75) * pixelsPerMeter;
-                    traveledPixels += px; setRouteDash(traveledPixels); updateUI(); checkAndSpeak();
-                    if (traveledPixels >= routePixelsTotal) arrive();
-                }
-            }
-        }
-        function arrive() { instrEl.textContent = 'Arrived'; speak('You have arrived at your destination'); stopMotion(); }
-        function speak(text) { if (!text) return; try { if ('speechSynthesis' in window) { const u = new SpeechSynthesisUtterance(text); u.lang = 'en-US'; window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); } } catch (e) { } }
-
-        /* start / stop motion */
-        async function startMotion() {
-            avgStepMeters = parseFloat(document.getElementById('stepLen').value) || 0.75;
-            if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-                try { const res = await DeviceMotionEvent.requestPermission(); if (res === 'granted') { window.addEventListener('devicemotion', motionHandler, { passive: true }); } else alert('Motion denied — use Manual Step'); } catch (e) { alert('Motion permission error — use Manual Step'); }
-            } else window.addEventListener('devicemotion', motionHandler, { passive: true });
-        }
-        function stopMotion() { window.removeEventListener('devicemotion', motionHandler); }
-
-        /* speak at thresholds */
-        function checkAndSpeak() {
-            if (!currentRoute || currentRoute.length < 2) return;
-            let cum = 0; const thresholds = [];
-            for (let i = 1; i < currentRoute.length; i++) { const a = nodePos(currentRoute[i - 1]), b = nodePos(currentRoute[i]); const d = Math.hypot(a.x - b.x, a.y - b.y); cum += d; thresholds.push(cum); }
-            for (let i = 0; i < thresholds.length; i++) {
-                if (traveledPixels >= thresholds[i] && lastSpokenIndex < i + 1) {
-                    const inst = makeInstructions(currentRoute); const s = inst[i + 1] ? inst[i + 1].speech : ''; speak(s); lastSpokenIndex = i + 1;
-                }
-            }
-        }
-
-        /* UI wiring */
-        startBtn.addEventListener('click', async () => {
-            const dest = destSelect.value;
-            if (!dest) { alert('Choose destination'); return; }
-            if (!setRouteTo(dest)) return;
-            instrEl.textContent = 'Navigation started'; await startMotion();
-        });
-        clearBtn.addEventListener('click', () => { route.setAttribute('points', ''); routeOverlay.setAttribute('points', ''); instrEl.textContent = 'No route'; traveledPixels = 0; stepCount = 0; updateUI(); });
-        manualStepBtn.addEventListener('click', () => { stepCount++; const px = (avgStepMeters || 0.75) * pixelsPerMeter; traveledPixels += px; setRouteDash(traveledPixels); updateUI(); checkAndSpeak(); if (traveledPixels >= routePixelsTotal) arrive(); });
-        resetBtn.addEventListener('click', () => { traveledPixels = 0; stepCount = 0; setRouteDash(0); updateUI(); instrEl.textContent = 'Progress reset'; });
 
         /* clickable rooms */
         document.querySelectorAll('.room').forEach(el => {
             el.addEventListener('click', () => {
                 const id = el.id;
-                if (POI_NODE[id]) { destSelect.value = id; el.classList.add('highlight'); setTimeout(() => el.classList.remove('highlight'), 900); }
+                if (POI_NODE[id]) {
+                    setRouteTo(id);
+                }
             });
         });
 
         /* search */
-        searchBtn.addEventListener('click', () => { const q = searchBox.value.trim().toUpperCase(); if (!q) return; const el = document.getElementById(q); if (el) { el.classList.add('highlight'); setTimeout(() => el.classList.remove('highlight'), 900); destSelect.value = q; } else alert('Not found: ' + q); });
+        searchBtn.addEventListener('click', () => {
+            const q = searchBox.value.trim().toUpperCase();
+            if (!q) return;
 
-        /* navigateTo API */
-        window.navigateTo = function (name) { if (!name) return; const n = name.trim().toUpperCase(); if (POI_NODE[n]) { destSelect.value = n; setRouteTo(n); startMotion().catch(() => { }); } else alert('Unknown: ' + name); };
+            const mappedQ = (venueMap && venueMap[q]) ? venueMap[q] : q;
 
-        /* init UI */
-        updateUI();
+            if (POI_NODE[mappedQ]) {
+                setRouteTo(mappedQ);
+            } else {
+                alert('Not found: ' + q);
+            }
+        });
+
+        /**
+         * Initializes the map on page load by reading the URL.
+         */
+        function initializeMap() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const venue = urlParams.get('venue');
+            if (!venue) return;
+
+            let destKey = venue.trim().toUpperCase();
+
+            if (venueMap[destKey]) {
+                destKey = venueMap[destKey];
+            }
+
+            if (POI_NODE[destKey]) {
+                setRouteTo(destKey);
+            } else {
+                console.warn('Could not find POI for venue:', venue);
+            }
+        }
+
+        /* init call */
+        initializeMap();
     </script>
 </body>
 
