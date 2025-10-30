@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Floor 2 — Indoor Navigation (Standalone)</title>
+    <style>
+        :root {
+            --bg: #eef4fb;
+            --card: #fff;
+            --accent: #0b66d6;
+            --muted: #516273;
+            --path: #ff5252;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, Arial, Roboto, sans-serif;
+            background: var(--bg)
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: var(--card);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 20
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 16px
+        }
+
+        #controls {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+            align-items: center
+        }
+
+        #app {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            min-height: calc(100vh - 64px)
+        }
+
+        #left {
+            flex: 1
+        }
+
+        #map-wrap {
+            background: var(--card);
+            padding: 12px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        svg {
+            width: 100%;
+            height: 85vh;
+            /* Adjusted height */
+            touch-action: none;
+            display: block
+        }
+
+        .room {
+            fill: #e8f6ff;
+            stroke: #154b78;
+            stroke-width: 1.5;
+            cursor: pointer
+        }
+
+        .room.highlight {
+            stroke: #ff6b6b;
+            stroke-width: 3;
+            fill: #fff6f6
+        }
+
+        .corridor-line {
+            stroke: #cfe6fb;
+            stroke-width: 26;
+            fill: none;
+            stroke-linecap: round
+        }
+
+        #route {
+            fill: none;
+            stroke: var(--path);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-linejoin: round
+        }
+
+        #routeOverlay {
+            fill: none;
+            stroke: transparent;
+            stroke-width: 12
+        }
+
+        button,
+        input,
+        select {
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #d6dae0;
+            background: #fff;
+            font-size: 14px
+        }
+
+        button.primary {
+            background: var(--accent);
+            color: #fff;
+            border: none
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Floor 2 — Indoor Navigation</h1>
+        <div id="controls">
+            <!-- ADDED BACK BUTTON -->
+            <button id="backBtn" title="Go back">Back to Events</button>
+            <button id="rotLeft" title="Rotate left">Left Arrow</button>
+            <button id="rotRight" title="Rotate right">Right Arrow</button>
+            <button id="resetView">Reset</button>
+            <input id="searchBox" placeholder="Search: LAB8, LH17, SH2..." />
+            <button id="searchBtn">Search</button>
+        </div>
+    </header>
+
+    <div id="app">
+        <div id="left">
+            <div id="map-wrap" class="panel">
+                <svg id="svg" viewBox="0 0 1000 1200" role="img" aria-label="Floor 2 map">
+                    <g id="viewport">
+                        <!-- corridor ring -->
+                        <polyline class="corridor-line" points="160,160 840,160 840,820 160,820 160,160" />
+
+                        <!-- central courtyard -->
+                        <rect x="300" y="300" width="400" height="360" fill="#fbfdff" stroke="#eef3fb" />
+                        <text x="500" y="480" font-size="42" text-anchor="middle" fill="#6b6b6b">Floor 2</text>
+
+                        <!-- TOP: Phy/Chem (Lab-8), Lab-9, Lab-10, Lab-11 -->
+                        <rect id="LAB8" class="room" x="170" y="70" width="150" height="70" />
+                        <text x="245" y="120" font-size="12" text-anchor="middle">Lab-1</text>
+
+                        <rect id="LAB9" class="room" x="340" y="70" width="150" height="70" />
+                        <text x="415" y="120" font-size="12" text-anchor="middle">Lab-2</text>
+
+                        <rect id="LAB10" class="room" x="510" y="70" width="150" height="70" />
+                        <text x="585" y="120" font-size="12" text-anchor="middle">Lab-3</text>
+
+                        <rect id="LAB11" class="room" x="680" y="70" width="150" height="70" />
+                        <text x="755" y="120" font-size="12" text-anchor="middle">Lab-4</text>
+
+                        <!-- Top-left stair and top-right stair + restroom -->
+                        <rect id="stair-NW" x="70" y="60" width="50" height="80" fill="#e8f2ff" stroke="#7aa6ff" />
+                        <text x="90" y="110" font-size="10" text-anchor="middle">Stair</text>
+
+                        <rect class="room" x="90" y="175" width="40" height="40" />
+                        <text x="110" y="195" font-size="11" text-anchor="middle">water</text>
+
+                        <rect id="stair-NE" x="870" y="60" width="50" height="80" fill="#e8f2ff" stroke="#7aa6ff" />
+                        <text x="895" y="110" font-size="10" text-anchor="middle">Stair</text>
+
+                        <rect class="room" x="860" y="200" width="40" height="40" />
+                        <text x="880" y="220" font-size="11" text-anchor="middle">water</text>
+
+                        <rect id="stair-SW" x="-10" y="850" width="50" height="80" fill="#e8f2ff" stroke="#7aa6ff" />
+                        <text x="15" y="890" font-size="10" text-anchor="middle">Stair</text>
+
+                        <rect class="room" x="80" y="775" width="40" height="40" />
+                        <text x="100" y="800" font-size="11" text-anchor="middle">water</text>
+
+                        <rect class="room" x="20" y="775" width="50" height="40" />
+                        <text x="40" y="800" font-size="11" text-anchor="middle">filt</text>
+
+                        <rect id="stair-SE" x="900" y="850" width="50" height="80" fill="#e8f2ff" stroke="#7aa6ff" />
+                        <text x="925" y="890" font-size="10" text-anchor="middle">Stair</text>
+
+                        <rect class="room" x="860" y="765" width="40" height="40" />
+                        <text x="880" y="790" font-size="11" text-anchor="middle">water</text>
+
+                        <!-- LEFT: Lab-12 Lab-13 Lab-14 + Smart Class -->
+                        <rect id="LAB12" class="room" x="15" y="220" width="120" height="120" />
+                        <text x="80" y="280" font-size="12" text-anchor="middle">
+                            <tspan x="80" dy="-6">R&amp;D Lab</tspan>
+                        </text>
+
+                        <rect id="LAB13" class="room" x="15" y="360" width="120" height="120" />
+                        <text x="80" y="420" font-size="12" text-anchor="middle">
+                            <tspan x="80" dy="-6">Zeta Lab</tspan>
+                            <tspan x="80" dy="12" font-size="10">Promptopia / Dust2data</tspan>
+                        </text>
+
+                        <rect id="LAB14" class="room" x="15" y="500" width="120" height="120" />
+                        <text x="80" y="560" font-size="12" text-anchor="middle">
+                            <tspan x="80" dy="-6">CADD Lab</tspan>
+                            <tspan x="80" dy="12" font-size="10">Algorithm Designing</tspan>
+                            <tspan x="80" dy="12" font-size="10">Code Debugging</tspan>
+                        </text>
+
+                        <rect id="SMART" class="room" x="15" y="640" width="120" height="120" />
+                        <text x="80" y="700" font-size="12" text-anchor="middle">
+                            <tspan x="80" dy="-6">Delta Lab</tspan>
+                            <tspan x="80" dy="12" font-size="10">Neuro Nexus</tspan>
+                        </text>
+
+                        <!-- RIGHT: LH-17 .. LH-21 top->bottom -->
+                        <rect id="LH17" class="room" x="860" y="245" width="80" height="90" />
+                        <text x="900" y="300" font-size="11" text-anchor="middle">
+                            <tspan x="900" dy="-5">LH-15</tspan>
+                            <tspan x="900" dy="11" font-size="9">Poster presentation</tspan>
+                        </text>
+
+                        <rect id="LH18" class="room" x="860" y="345" width="80" height="90" />
+                        <text x="900" y="400" font-size="11" text-anchor="middle">
+                            <tspan x="900" dy="-5">LH-16</tspan>
+                            <tspan x="900" dy="11" font-size="9">Brain bytes</tspan>
+                        </text>
+
+                        <rect id="LH19" class="room" x="860" y="445" width="80" height="90" />
+                        <text x="900" y="500" font-size="11" text-anchor="middle">
+                            <tspan x="900" dy="-5">LH-17</tspan>
+                            <tspan x="900" dy="11" font-size="9">Paper presentation</tspan>
+                        </text>
+
+                        <rect id="LH20" class="room" x="860" y="545" width="80" height="90" />
+                        <text x="900" y="600" font-size="11" text-anchor="middle">LH-18</text>
+
+                        <rect id="LH21" class="room" x="860" y="645" width="80" height="90" />
+                        <text x="900" y="700" font-size="11" text-anchor="middle">LH-19</text>
+
+                        <!-- BOTTOM: SH-2 | Staff Room | LH-22 | LH-23 -->
+                        <rect id="SH2" class="room" x="90" y="840" width="250" height="70" />
+                        <text x="270" y="875" font-size="12" text-anchor="middle">SH-2</text>
+
+                        <rect id="STAFF" class="room" x="360" y="840" width="200" height="70" />
+                        <text x="460" y="875" font-size="12" text-anchor="middle">Staff Room</text>
+
+                        <rect id="LH22" class="room" x="580" y="840" width="150" height="70" />
+                        <text x="655" y="875" font-size="12" text-anchor="middle">
+                            <tspan x="655" dy="-6">LH-21</tspan>
+                            <tspan x="655" dy="12" font-size="10">Paper Presentation</tspan>
+                            <tspan x="655" dy="12" font-size="10">Lyrics Coding</tspan>
+                            <tspan x="655" dy="12" font-size="10">Act it Out</tspan>
+                        </text>
+
+                        <rect id="LH23" class="room" x="750" y="840" width="120" height="70" />
+                        <text x="810" y="875" font-size="12" text-anchor="middle">
+                            <tspan x="810" dy="-6">LH-20</tspan>
+                            <tspan x="810" dy="12" font-size="10">Technical Quiz</tspan>
+                        </text>
+
+                        <!-- Top-right restroom near stair -->
+                        <rect id="REST_TOP" class="room" x="940" y="80" width="80" height="60"
+                            style="fill:#ffefef;stroke:#e04a4a" />
+                        <text x="980" y="115" font-size="11" text-anchor="middle">Restroom</text>
+
+                        <!-- route + overlay (drawn by JS) -->
+                        <polyline id="route" points="" />
+                        <polyline id="routeOverlay" points="" />
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* --------------------------
+        Node coordinates and graph (corridor ring)
+        ---------------------------*/
+        const START_pos = { x: 500, y: 920 }; // Original entrance, not used as start
+        const nodes = {
+            // Corners
+            NW: { x: 160, y: 160 },
+            NE: { x: 840, y: 160 },
+            SE: { x: 840, y: 820 },
+            SW: { x: 160, y: 820 }, // This is the new START node
+            // Top intermediates
+            N1: { x: 245, y: 160 }, // LAB8
+            N2: { x: 415, y: 160 }, // LAB9
+            N3: { x: 585, y: 160 }, // LAB10
+            N4: { x: 755, y: 160 }, // LAB11
+            // Right intermediates
+            E1: { x: 840, y: 290 }, // LH17
+            E2: { x: 840, y: 390 }, // LH18
+            E3: { x: 840, y: 490 }, // LH19
+            E4: { x: 840, y: 590 }, // LH20
+            E5: { x: 840, y: 690 }, // LH21
+            // Bottom intermediates (right to left)
+            B1: { x: 810, y: 820 }, // LH23
+            B2: { x: 655, y: 820 }, // LH22
+            B3: { x: 460, y: 820 }, // STAFF
+            B4: { x: 215, y: 820 }, // SH2
+            // Left intermediates (bottom to top)
+            L1: { x: 160, y: 280 }, // LAB12
+            L2: { x: 160, y: 420 }, // LAB13
+            L3: { x: 160, y: 560 }, // LAB14
+            L4: { x: 160, y: 700 }  // SMART
+        };
+
+        /* adjacency ring */
+        const graph = {
+            B3: ['B4', 'B2'],
+            B4: ['B3', 'SW'],
+            SW: ['B4', 'L4'], // New start
+            L4: ['SW', 'L3'],
+            L3: ['L4', 'L2'],
+            L2: ['L3', 'L1'],
+            L1: ['L2', 'NW'],
+            NW: ['L1', 'N1'],
+            N1: ['NW', 'N2'],
+            N2: ['N1', 'N3'],
+            N3: ['N2', 'N4'],
+            N4: ['N3', 'NE'],
+            NE: ['N4', 'E1'],
+            E1: ['NE', 'E2'],
+            E2: ['E1', 'E3'],
+            E3: ['E2', 'E4'],
+            E4: ['E3', 'E5'],
+            E5: ['E4', 'SE'],
+            SE: ['E5', 'B1'],
+            B1: ['SE', 'B2'],
+            B2: ['B1', 'B3']
+        };
+        graph['START_pos'] = ['B3'];
+
+        /* POI -> nearest node mapping */
+        const POI_NODE = {
+            'LAB8': 'N1', 'LAB9': 'N2', 'LAB10': 'N3', 'LAB11': 'N4', 'REST_TOP': 'NE',
+            'LAB12': 'L1', 'LAB13': 'L2', 'LAB14': 'L3', 'SMART': 'L4',
+            'LH17': 'E1', 'LH18': 'E2', 'LH19': 'E3', 'LH20': 'E4', 'LH21': 'E5',
+            'SH2': 'B4', 'STAFF': 'B3', 'LH22': 'B2', 'LH23': 'B1'
+        };
+
+        /* FIXED: Map venue names from events.html to local SVG IDs */
+        const venueMap = {
+            // CSE
+            'LH18': 'LH20', // "Paper Presentation - LH18" -> id="LH20"
+            'LH16': 'LH18', // "Brain Bytes - LH16" -> id="LH18"
+            'CADD LAB': 'LAB14',
+            'LH17': 'LH19', // "Poster Presentation - LH17" -> id="LH19"
+            // AI&DS
+            'LH 12': 'LAB12', // "Idea Sphere - LH 12" -> id="LAB12" (R&D)
+            'DELTA LAB': 'SMART',
+            'ZETA LAB': 'LAB13',
+            // EEE
+            'LH22': 'LH22', // "Paper Presentation - LH22" -> id="LH22"
+            'LH23': 'LH23'  // "Technical Quiz - LH23" -> id="LH23"
+            // "EDC lab" does not exist on this map
+        };
+
+        /* DOM */
+        const svg = document.getElementById('svg');
+        const viewport = document.getElementById('viewport');
+        const route = document.getElementById('route');
+        const routeOverlay = document.getElementById('routeOverlay');
+        const searchBtn = document.getElementById('searchBtn');
+        const searchBox = document.getElementById('searchBox');
+        const rotLeft = document.getElementById('rotLeft');
+        const rotRight = document.getElementById('rotRight');
+        const resetView = document.getElementById('resetView');
+        const backBtn = document.getElementById('backBtn'); // Back button
+
+        /* transform state */
+        let state = { tx: 0, ty: 0, scale: 1, rotate: 0, dragging: false, lastX: 0, lastY: 0 };
+        function applyTransform() { viewport.setAttribute('transform', `translate(${state.tx} ${state.ty}) scale(${state.scale}) rotate(${state.rotate} 500 500)`); }
+        state.tx = 40; state.ty = 10; state.scale = 1; applyTransform();
+
+        /* pan/zoom handlers */
+        svg.addEventListener('pointerdown', (e) => { svg.setPointerCapture(e.pointerId); state.dragging = true; state.lastX = e.clientX; state.lastY = e.clientY; svg.style.cursor = 'grabbing'; });
+        svg.addEventListener('pointermove', (e) => { if (!state.dragging) return; const dx = e.clientX - state.lastX, dy = e.clientY - state.lastY; state.lastX = e.clientX; state.lastY = e.clientY; state.tx += dx; state.ty += dy; applyTransform(); });
+        svg.addEventListener('pointerup', (e) => { state.dragging = false; try { svg.releasePointerCapture(e.pointerId); } catch (e) { } svg.style.cursor = 'grab'; });
+        svg.addEventListener('pointerleave', () => state.dragging = false);
+        svg.addEventListener('wheel', (e) => { e.preventDefault(); if (e.shiftKey) { state.rotate += e.deltaY > 0 ? 3 : -3; } else { const delta = -e.deltaY * 0.0015; state.scale = Math.min(3, Math.max(0.4, state.scale * (1 + delta))); } applyTransform(); }, { passive: false });
+        rotLeft.addEventListener('click', () => { state.rotate -= 15; applyTransform(); });
+        rotRight.addEventListener('click', () => { state.rotate += 15; applyTransform(); });
+        resetView.addEventListener('click', () => { state.tx = 40; state.ty = 10; state.scale = 1; state.rotate = 0; applyTransform(); });
+
+        // Back button listener
+        backBtn.addEventListener('click', () => {
+            window.location.href = 'events.html';
+        });
+
+        /* routing BFS */
+        function findPath(start, end) {
+            if (start === end) return [start];
+            const q = [start], prev = { [start]: null };
+            while (q.length) {
+                const cur = q.shift();
+                for (const nb of (graph[cur] || [])) {
+                    if (prev[nb] !== undefined) continue;
+                    prev[nb] = cur; q.push(nb);
+                    if (nb === end) {
+                        const out = [nb]; let p = cur; while (p !== null) { out.unshift(p); p = prev[p]; } return out;
+                    }
+                }
+            }
+            return null;
+        }
+        function nodePos(k) { if (k === 'START_pos') return START_pos; return nodes[k]; }
+        function pathToPoints(seq) { return seq.map(k => { const p = nodePos(k); return `${p.x} ${p.y}`; }).join(' '); }
+
+        /**
+         * Draws a path from the start to the destination.
+         * @param {string} destKey The ID of the destination (e.g., "LAB14", "LH18")
+         */
+        function setRouteTo(destKey) {
+            // 1. Clear previous highlights/routes
+            route.setAttribute('points', '');
+            document.querySelectorAll('.room.highlight').forEach(el => el.classList.remove('highlight'));
+
+            // 2. Find destination node
+            if (!POI_NODE[destKey]) {
+                console.warn('Unknown destination key:', destKey);
+                return false;
+            }
+            const nodeKey = POI_NODE[destKey];
+
+            // 3. Determine start node (Hardcoded for Floor 2)
+            const startNode = 'SW'; // Bottom-left corner node
+
+            // 4. Find path
+            const seq = findPath(startNode, nodeKey);
+            if (!seq) {
+                console.warn('No path found from', startNode, 'to', nodeKey);
+                return false;
+            }
+
+            // 5. Draw path
+            const pts = pathToPoints(seq);
+            route.setAttribute('points', pts);
+            routeOverlay.setAttribute('points', pts);
+
+            // 6. Highlight destination
+            const destEl = document.getElementById(destKey);
+            if (destEl) {
+                destEl.classList.add('highlight');
+            }
+            return true;
+        }
+
+        /* clickable rooms */
+        document.querySelectorAll('.room').forEach(el => {
+            el.addEventListener('click', () => {
+                const id = el.id;
+                if (POI_NODE[id]) {
+                    setRouteTo(id);
+                }
+            });
+        });
+
+        /* search */
+        searchBtn.addEventListener('click', () => {
+            const q = searchBox.value.trim().toUpperCase();
+            if (!q) return;
+
+            const mappedQ = (venueMap && venueMap[q]) ? venueMap[q] : q;
+
+            if (POI_NODE[mappedQ]) {
+                setRouteTo(mappedQ);
+            } else {
+                alert('Not found: ' + q);
+            }
+        });
+
+        /**
+         * Initializes the map on page load by reading the URL.
+         */
+        function initializeMap() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const venue = urlParams.get('venue');
+            if (!venue) return;
+
+            let destKey = venue.trim().toUpperCase();
+
+            if (venueMap[destKey]) {
+                destKey = venueMap[destKey];
+            }
+
+            if (POI_NODE[destKey]) {
+                setRouteTo(destKey);
+            } else {
+                console.warn('Could not find POI for venue:', venue);
+            }
+        }
+
+        /* init call */
+        initializeMap();
+    </script>
+</body>
+
+</html>
